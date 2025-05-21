@@ -1,9 +1,11 @@
-const jwt = require("jsonwebtoken");
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-module.exports = function (req, res, next) {
-    const token = req.header("x-auth-token");
-    if (!token) return res.status(401).send("Ingen token, åtkomst nekad");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Ingen token, åtkomst nekad" });
+  }
 
+  const token = authHeader.split(" ")[1];
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.user;
@@ -12,3 +14,5 @@ module.exports = function (req, res, next) {
         res.status(400).send("Ogiltig token");
     }
 };
+
+module.exports = verifyToken;
