@@ -1,31 +1,32 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const MenuItem = require("../models/menuItem");
-const auth = require("../middleware/authMiddleware");
+const MenuItem = require('../models/menuItem');
 
-// Hämta alla
-router.get("/", async (req, res) => {
-    const items = await MenuItem.find();
-    res.json(items);
+router.get('/menu-items', async (req, res) => {
+  try {
+    const menuItems = await MenuItem.find();  // Hämta alla menyobjekt från databasen
+    res.json(menuItems);  // Skicka tillbaka menyobjekten som JSON
+  } catch (error) {
+    console.error('Fel vid hämtning av menyobjekt:', error);
+    res.status(500).json({ error: 'Fel vid hämtning av menyobjekt' });
+  }
 });
 
-// Skapa ny
-router.post("/", auth, async (req, res) => {
-    const item = new MenuItem(req.body);
-    await item.save();
-    res.json(item);
-});
-
-// Uppdatera
-router.put("/:id", auth, async (req, res) => {
-    const item = await MenuItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(item);
-});
-
-// Radera
-router.delete("/:id", auth, async (req, res) => {
-    await MenuItem.findByIdAndDelete(req.params.id);
-    res.json({ msg: "Raderad" });
+// POST-rutt för att lägga till ett nytt menyobjekt
+router.post('/menu-items', async (req, res) => {
+  try {
+    const { name, price, category } = req.body;
+    const newMenuItem = new MenuItem({
+      name,
+      price,
+      category
+    });
+    await newMenuItem.save();  // Spara menyobjektet i databasen
+    res.status(201).json(newMenuItem);  // Skicka tillbaka det nyskapade menyobjektet
+  } catch (error) {
+    console.error('Fel vid skapande av menyobjekt:', error);
+    res.status(500).json({ error: 'Fel vid skapande av menyobjekt' });
+  }
 });
 
 module.exports = router;
