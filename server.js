@@ -1,10 +1,12 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
 
-dotenv.config();
+console.log("JWT_SECRET från .env i server.js:", process.env.JWT_SECRET); 
 
 const app = express();
 
