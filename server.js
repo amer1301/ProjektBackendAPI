@@ -27,7 +27,8 @@ app.get("/", (req, res) => {
 });
 
 // Använd menyrutterna
-app.use('/api/menu', menuRoutes);  // Alla menyrutter är nu tillgängliga under "/api/menu"
+app.use('/api/menu', menuRoutes);
+app.use('/api/bestallningar', require('./routes/bestallningar'));
 
 // Använd autentiseringrutter
 app.use("/api/auth", authRoutes);  // Alla autentiseringsrutter är nu tillgängliga under "/api/auth"
