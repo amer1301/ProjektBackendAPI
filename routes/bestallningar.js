@@ -36,5 +36,24 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// PUT - Uppdatera status för en beställning
+router.put('/:id', async (req, res) => {
+  try {
+    const uppdaterad = await Bestallning.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+
+    if (!uppdaterad) {
+      return res.status(404).json({ message: 'Beställning hittades inte' });
+    }
+
+    res.json({ message: 'Status uppdaterad', bestallning: uppdaterad });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;
