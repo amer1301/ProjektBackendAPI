@@ -8,8 +8,12 @@ const bestallningSchema = new mongoose.Schema({
   antal: String,
   meddelande: String,
   upphamtning: String,
-  skapad: { type: Date, default: Date.now }
+  skapad: { type: Date, default: Date.now },
+  status: {
+    type: String,
+    enum: ['inkommen', 'påbörjad', 'klar', 'avklarad'],
+    default: 'inkommen'
+  }
 });
 
 module.exports = mongoose.model('Bestallning', bestallningSchema, 'bestallningar');
-
