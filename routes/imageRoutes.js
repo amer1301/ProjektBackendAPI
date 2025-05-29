@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/:imageName', async (req, res) => {
   const { imageName } = req.params;
-  const imagePath = path.join(__dirname, '..', 'images', imageName);
+  //const imagePath = path.join(__dirname, '..', 'images', imageName);
 
   if (!fs.existsSync(imagePath)) {
     return res.status(404).send('Bild hittades inte');
