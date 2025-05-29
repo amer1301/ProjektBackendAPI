@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Bestallning = require('../models/Bestallning');
+const Bestallning = require('../models/bestallning');
 
 // POST - Lägg till ny beställning
 router.post('/', async (req, res) => {
