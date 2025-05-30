@@ -55,6 +55,11 @@ router.post("/login", async (req, res) => {
 
     // Kontrollera JWT_SECRET
     console.log("JWT_SECRET:", process.env.JWT_SECRET);
+if (!process.env.JWT_SECRET) {
+  console.error("JWT_SECRET är inte definierad!");
+  return res.status(500).json({ error: "Serverfel: JWT_SECRET saknas" });
+}
+
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '7d',
