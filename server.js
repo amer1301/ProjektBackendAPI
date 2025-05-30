@@ -58,8 +58,9 @@ app.use("/api/bestallningar", bestallningarRoutes);
 app.use("/api/auth", authRoutes);
 
 // Bildhantering via Sharp
-app.use("/images", imageRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use("/images", imageRoutes);
+
 
 // TESTRUTT
 app.get("/", (req, res) => {
