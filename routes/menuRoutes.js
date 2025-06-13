@@ -13,8 +13,23 @@ router.get('/menu-items', async (req, res) => {
   }
 });
 
+// Hämta menyobjekt via ID
+router.get('/menu-items/item/:id', async (req, res) => {
+  try {
+    const item = await MenuItem.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ error: 'Menyobjekt hittades inte' });
+    }
+    res.json(item);
+  } catch (error) {
+    console.error('Fel vid hämtning av menyobjekt via ID:', error);
+    res.status(500).json({ error: 'Fel vid hämtning av menyobjekt via ID' });
+  }
+});
+
+
 // Hämta meny för ett specifikt kafé, inkl fastlåsta
-router.get('/menu-items/:cafe', async (req, res) => {
+router.get('/menu-items/by-cafe/:cafe', async (req, res) => {
   try {
     const cafe = req.params.cafe;
     const menuItems = await MenuItem.find({
@@ -42,6 +57,27 @@ router.post('/menu-items', async (req, res) => {
     res.status(500).json({ error: 'Fel vid skapande av menyobjekt' });
   }
 });
+
+// PUT - Uppdatera menyobjekt
+router.put('/menu-items/:id', async (req, res) => {
+  console.log("PUT /menu-items/:id anropad med id:", req.params.id);
+  try {
+    const { name, price, category, cafe } = req.body;
+    const updatedItem = await MenuItem.findByIdAndUpdate(
+      req.params.id,
+      { name, price, category, cafe },
+      { new: true } // returnera det uppdaterade dokumentet
+    );
+    if (!updatedItem) {
+      return res.status(404).json({ error: 'Bakverk hittades inte' });
+    }
+    res.json(updatedItem);
+  } catch (error) {
+    console.error('Fel vid uppdatering av menyobjekt:', error);
+    res.status(500).json({ error: 'Fel vid uppdatering av menyobjekt' });
+  }
+});
+
 
 // DELETE med skydd för fastlåsta
 router.delete('/menu-items/:id', async (req, res) => {
